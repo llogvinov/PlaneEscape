@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private float _cpt = 0f;
     private int _score = 0;
+    private float _reloadTime = 1.5f;
 
     private Rigidbody2D _playerRigidbody;
     private Camera _mainCamera;
@@ -55,7 +56,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!IsGameOver)
+        EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
+        if (enemy != null || !IsGameOver)
         {
             IsGameOver = true;
             GetComponent<SpriteRenderer>().enabled = false;
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
             GetComponentInChildren<ParticleSystem>().Play();
 
             //restart game after 1.5 sec
-            Invoke("ReloadScene", 1.5f);
+            StartCoroutine(ReloadScene());
         }
     }
 
@@ -78,9 +80,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ReloadScene()
+    private IEnumerator ReloadScene()
     {
-        SceneManager.LoadScene(0);
+        yield return new WaitForSeconds(_reloadTime);
+        SceneController.ReloadScene();
     }
 
 }

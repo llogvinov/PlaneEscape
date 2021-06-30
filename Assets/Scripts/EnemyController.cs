@@ -29,7 +29,8 @@ public class EnemyController : MonoBehaviour
         Vector2 direction = _player.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion r = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, r, _rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation, r, _rotationSpeed * Time.deltaTime);
     }
 
 }
